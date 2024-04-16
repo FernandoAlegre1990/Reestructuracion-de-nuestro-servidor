@@ -1,0 +1,39 @@
+<hr />
+<div>
+    {{#if userInfo}}
+        <p>Bienvenido/a, {{userInfo.first_name}}. Su rol es: {{userInfo.role}}</p>
+    {{else}}
+        <p>Bienvenido/a, Usuario</p>
+    {{/if}}
+</div>
+<hr />
+<h2>Productos</h2>
+
+<div class="card-container">
+    {{#each docs}}
+        <div class="card">
+            <div class="card-header">
+                <h3>{{this.title}}</h3>
+            </div>
+            <div class="card-body">
+                <p>{{this.description}}</p>
+                <p>Precio: {{this.price}}</p>
+                <p>Código: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <p>Categoría: {{this.category}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="/products/{{this._id}}" class="btn">Ver detalles</a>
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+<div>
+    {{#if hasPrevPage}}
+    <a href="{{ prevLink }}">Anterior</a>
+    {{/if}}
+    {{#if hasNextPage}}
+    <a href="{{ nextLink }}">Siguiente</a>
+    {{/if}}
+</div>
