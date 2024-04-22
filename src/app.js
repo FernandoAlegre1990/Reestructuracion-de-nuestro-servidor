@@ -7,8 +7,9 @@ import viewsRouter from './routers/views.router.js'
 import chatRouter from './routers/chat.router.js'
 import sessionsRouter from './routers/sessions.router.js'
 import viewsUserRouter from './routers/viewsUser.router.js'
+import mailPurchaseRouter from './routers/mailPurchase.router.js'
 import mongoose from 'mongoose'
-import Message from './dao/models/message.model.js'
+import Message from './models/message.model.js'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
@@ -25,11 +26,13 @@ app.use(express.static('./src/public')); // middleware para servir archivos estÃ
 
 // configuracion de la sesion
 app.use(session({
-  store: MongoStore.create({ 
-    clientPromise: mongoose.connect(mongoURL, { 
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }).then(mongoose => mongoose.connection.getClient()), // Obtener el cliente de la conexiÃ³n de Mongoose
+    store: MongoStore.create({
+      mongoUrl: mongoURL,
+      dbName: mongoDBName,
+      mongoOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }
   }),
   secret: 'secret',
   resave: true,
@@ -75,6 +78,7 @@ try {
     app.use('/api/products', productsRouter); // registra el router de productos en la ruta /api/products
     app.use('/api/carts', cartsRouter); // registra el router de carritos en la ruta /api/carts
     app.use('/api/sessions', sessionsRouter); // registra el router de sesiones en la ruta /api/sessions
+    app.use('/sendMailPurchase', mailPurchaseRouter); // ruta utilizada para enviar el detalle de la compra
     
     io.on('connection', socket => {
         console.log('Nuevo cliente conectado!')

@@ -1,6 +1,6 @@
 <h2>Chat</h2>
 <div>
-    <span id="user"></span>  <input type="text" id="chatbox" placeholder="Mensaje" />
+    <span id="user"></span>  {{#if this.email}}<input type="text" id="chatbox" placeholder="Mensaje" />{{/if}}
 </div>
 <div id="messagesLogs"></div>
 
