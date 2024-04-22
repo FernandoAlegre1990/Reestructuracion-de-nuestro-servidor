@@ -80,5 +80,15 @@ nav ul li a:hover {
     text-align: center;
 }
 
+.ticket {
+    background-color: aliceblue;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    border-radius: 20px;
+    padding: 20px;
+}
 
 
