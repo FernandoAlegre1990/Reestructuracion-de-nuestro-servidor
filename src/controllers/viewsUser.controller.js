@@ -23,6 +23,7 @@ export const viewsUserProfileController = (req, res) => {
         last_name: req.session.user.last_name,
         email: req.session.user.email,
         age: req.session.user.age,
+        cart: req.session.user.cart,
     };
     //console.log(userInfo);
     res.render('profile', userInfo);
