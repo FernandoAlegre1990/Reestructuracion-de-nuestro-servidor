@@ -7,6 +7,7 @@
         </br>
         {{#each products}}
         <li>
+            {{this.title}}
             {{this.product}} - {{this.quantity}}
         </li>
         {{/each}}
@@ -22,6 +23,7 @@
     <ul id="purchasedProducts"></ul>
     <h4>Productos No Comprados</h4>
     <ul id="notPurchasedProducts"></ul>
+    <p id="totalCuenta"></p> <!-- Agrega un elemento para mostrar el total -->
 </div>
 
 <script type="module" src="/js/cartPurchase.js"></script>

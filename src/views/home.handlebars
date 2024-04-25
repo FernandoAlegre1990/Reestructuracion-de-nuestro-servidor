@@ -1,3 +1,6 @@
+
+
+
 <hr />
 <div>
     {{#if userInfo}}
@@ -22,13 +25,16 @@
                 <p>Stock: {{this.stock}}</p>
                 <p>Categoría: {{this.category}}</p>
             </div>
+
             <div class="card-footer">
                 <a href="/products/{{this._id}}" class="btn">Ver detalles</a>
+                <button class="addToCartBtn" cID={{this.cartID}} data-product-id={{this.product._id}}>Agregar al
+                        carrito</button>
             </div>
+                   
         </div>
     {{/each}}
 </div>
-
 <div>
     {{#if hasPrevPage}}
     <a href="{{ prevLink }}">Anterior</a>
@@ -37,3 +43,5 @@
     <a href="{{ nextLink }}">Siguiente</a>
     {{/if}}
 </div>
+
+      <script src="/js/addProductCart.js"></script>

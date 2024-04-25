@@ -36,6 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const productosComprados = responseData.purchasedProducts
 
+                    // Calcula el total de la cuenta
+function calcularTotal(productos) {
+    let total = 0;
+    productos.forEach(producto => {
+        total += producto.product.price * producto.quantity;
+    });
+    return total;
+}
+
+// Llama a la función con los productos comprados
+const totalCuenta = calcularTotal(responseData.purchasedProducts);
+
+// Muestra el total en tu vista 
+const totalCuentaElement = document.getElementById('totalCuenta');
+totalCuentaElement.textContent = `Total: $${totalCuenta.toFixed(2)}`;
+
                     // Después de mostrar los resultados, enviar el correo electrónico
                     const mailUser = purchaseBtn.getAttribute('data-mail-user');
                     const sendMailResponse = await fetch('/sendMailPurchase/send', {
@@ -43,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        // body: JSON.stringify({ mailUser })
                         body: JSON.stringify(productosComprados)
                     });
 

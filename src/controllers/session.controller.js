@@ -1,6 +1,6 @@
 import passport from 'passport';
 import Cart from '../models/cart.model.js'
-import UserDTO from '../../dto/User.js'
+import UserDTO from '../dto/User.js'
 
 export const createUserController = async (req, res, next) => {
     passport.authenticate('register', async (err, user, info) => {

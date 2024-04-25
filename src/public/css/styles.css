@@ -91,4 +91,9 @@ nav ul li a:hover {
     padding: 20px;
 }
 
+#totalCuenta {
+    font-weight: bold;
+    color: #007bff; /* Cambia el color según tus preferencias */
+}
+
 
