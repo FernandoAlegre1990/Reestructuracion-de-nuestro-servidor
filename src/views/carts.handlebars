@@ -7,8 +7,7 @@
         </br>
         {{#each products}}
         <li>
-            {{this.title}}
-            {{this.product}} - {{this.quantity}}
+            Producto: {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}
         </li>
         {{/each}}
     </ul>

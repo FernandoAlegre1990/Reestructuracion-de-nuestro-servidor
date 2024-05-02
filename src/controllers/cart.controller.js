@@ -17,22 +17,19 @@ export const readCartsController = async (req, res) => {
 export const readCartController = async (req, res) => {
   try {
     const cartId = req.params.cid;
-    const cart = await Cart.findById(cartId).populate('products.product').lean().exec();
+    const cart = await Cart.findById(cartId).lean().exec();
 
     if (!cart) {
       res.status(404).json({ error: 'Carrito no encontrado' });
       return;
     }
-
-    // Obtener la información completa de los productos utilizando el populate
-    const productsWithInfo = await Product.populate(cart, {
+    // Obtener los detalles completos de los productos utilizando populate
+    const populatedCart = await Cart.populate(cart, {
       path: 'products.product',
       model: 'products',
     });
 
-    res.status(200).json(productsWithInfo);
-
-    // res.status(200).json(cart.products);
+    res.status(200).json(populatedCart);
   } catch (error) {
     console.log('Error al obtener los productos del carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
