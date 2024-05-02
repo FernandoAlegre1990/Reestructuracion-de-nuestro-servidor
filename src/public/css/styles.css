@@ -24,32 +24,47 @@ h1, h2, h3 {
 .btn:hover {
     background-color: #d95d00; /* Naranja más oscuro al pasar el ratón */
 }
-/* Estilos para la barra de navegación */
 nav {
-    background-color: #f2f2f2;
+    background-color: #1565c0; /* Azul oscuro */
     padding: 10px 0;
 }
 
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-nav ul li {
-    display: inline;
-    margin: 0 10px;
+li {
+    margin: 0 20px;
 }
 
-nav ul li a {
+a {
     text-decoration: none;
-    color: #333;
+    color: #fff; /* Texto blanco */
     font-weight: bold;
+    transition: color 0.3s;
 }
 
-nav ul li a:hover {
-    color: #007bff;
+a:hover {
+    color: #ff9800; /* Naranja al pasar el ratón */
+}
+
+/* Estilo para las líneas divisorias */
+li.separator {
+    color: #fff;
+    font-size: 18px;
+}
+
+/* Estilo específico para el enlace "Home" */
+li.home a {
+    font-size: 24px;
+}
+
+/* Estilo específico para los enlaces de navegación */
+li a:not(.home) {
+    font-size: 16px;
 }
 
 .card-container {
@@ -96,4 +111,33 @@ nav ul li a:hover {
     color: #007bff; /* Cambia el color según tus preferencias */
 }
 
+
+.welcome-section {
+    position: relative;
+    height: 100vh;
+    background-image:url('https://th.bing.com/th/id/OIG3.b8VQ355OHEnIOJF5toy9?pid=ImgGn');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+ /* Estilo para la sección de introducción */
+ .intro-section {
+    background-color: #fff; /* Fondo blanco */
+    padding: 40px;
+    text-align: center;
+}
+
+.intro-title {
+    font-size: 28px;
+    color: #1565c0; /* Azul oscuro */
+    margin-bottom: 10px;
+}
+
+.intro-description {
+    font-size: 16px;
+    color: #777; /* Texto gris */
+}
 
