@@ -1,7 +1,7 @@
 {
-  "name": "Reestructuracion-de-nuestro-servidor",
+  "name": "implementacion-de-logger",
   "version": "1.0.0",
-  "description": "Esta práctica integradora abarca varios temas importantes en el desarrollo de aplicaciones utilizando Node.js. A continuación, se detallan las habilidades que se deben adquirir en cada área:",
+  "description": "",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
@@ -30,6 +30,7 @@
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",
     "socket.io": "^4.7.4",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "winston": "^3.13.0"
   }
 }

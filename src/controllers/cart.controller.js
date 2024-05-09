@@ -3,13 +3,14 @@ import Cart from '../models/cart.model.js';
 import Product from '../models/product.model.js';
 import { ProductService } from '../services/index.js';
 import Ticket from '../models/ticket.model.js';
+import logger from '../logger.js'
 
 export const readCartsController = async (req, res) => {
   try {
     const carts = await Cart.find().lean().exec();
     res.status(200).json(carts);
   } catch (error) {
-    console.log('Error al obtener los carritos:', error);
+    logger.error('Error al obtener los carritos:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -17,21 +18,24 @@ export const readCartsController = async (req, res) => {
 export const readCartController = async (req, res) => {
   try {
     const cartId = req.params.cid;
-    const cart = await Cart.findById(cartId).lean().exec();
+    const cart = await Cart.findById(cartId).populate('products.product').lean().exec();
 
     if (!cart) {
       res.status(404).json({ error: 'Carrito no encontrado' });
       return;
     }
-    // Obtener los detalles completos de los productos utilizando populate
-    const populatedCart = await Cart.populate(cart, {
+
+    // Obtener la información completa de los productos utilizando el populate
+    const productsWithInfo = await Product.populate(cart, {
       path: 'products.product',
       model: 'products',
     });
 
-    res.status(200).json(populatedCart);
+    res.status(200).json(productsWithInfo);
+
+    // res.status(200).json(cart.products);
   } catch (error) {
-    console.log('Error al obtener los productos del carrito:', error);
+    logger.error('Error al obtener los productos del carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -42,7 +46,7 @@ export const createCartController = async (req, res) => {
 
     res.status(201).json(newCart);
   } catch (error) {
-    console.log('Error al crear el carrito:', error);
+    logger.error('Error al crear el carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -97,7 +101,7 @@ export const addProductCartController = async (req, res) => {
 
     res.status(201).json(cart);
   } catch (error) {
-    console.log('Error al agregar producto al carrito:', error);
+    logger.error('Error al agregar producto al carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -118,7 +122,7 @@ export const updateProductsCartController = async (req, res) => {
 
     res.status(200).json({ message: 'Carrito actualizado satisfactoriamente' });
   } catch (error) {
-    console.log('Error al actualizar el carrito:', error);
+    logger.error('Error al actualizar el carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -152,7 +156,7 @@ export const updateProductCartController = async (req, res) => {
 
     res.status(200).json({ message: 'Cantidad de producto actualizada satisfactoriamente' });
   } catch (error) {
-    console.log('Error al actualizar cantidad de producto en el carrito:', error);
+    logger.error('Error al actualizar cantidad de producto en el carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -176,7 +180,7 @@ export const deleteProductCartController = async (req, res) => {
 
     res.status(200).json({ message: 'Producto eliminado del carrito satisfactoriamente' });
   } catch (error) {
-    console.log('Error al eliminar producto del carrito:', error);
+    logger.error('Error al eliminar producto del carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -199,7 +203,7 @@ export const deleteProductsCartController = async (req, res) => {
 
     res.status(200).json({ message: 'Carrito vaciado satisfactoriamente' });
   } catch (error) {
-    console.log('Error al vaciar el carrito:', error);
+    logger.error('Error al vaciar el carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -266,7 +270,7 @@ export const purchaseCartController = async (req, res) => {
       ticket: newTicket
     });
   } catch (error) {
-    console.log('Error al finalizar la compra:', error);
+    logger.error('Error al finalizar la compra:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
