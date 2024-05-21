@@ -1,20 +1,24 @@
 <div>
-    <span>ID del Carrito :  {{cid}}</span>
+    <span>ID del Carrito: {{cid}}</span>
 </div>
 <div>
     <ul>
         <h4>Productos agregados al carrito</h4>
-        </br>
         {{#each products}}
+           <br> <!-- Salto de línea -->
         <li>
-            Producto: {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}
+            <div>
+                <img src="{{this.product.thumbnail}}" alt="{{this.product.title}}" style="max-width: 100px;">
+                <span>Producto: {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}</span>
+            </div>
         </li>
+        <br> <!-- Salto de línea -->
         {{/each}}
     </ul>
 </div>
 
 {{#if products.length}}
-    <button id="purchaseBtn" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button> <!-- Agregar atributo de datos -->
+    <button id="purchaseBtn" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button>
 {{/if}}
 
 <div id="purchaseResults" class="ticket" style="display: none;">
@@ -22,7 +26,7 @@
     <ul id="purchasedProducts"></ul>
     <h4>Productos No Comprados</h4>
     <ul id="notPurchasedProducts"></ul>
-    <p id="totalCuenta"></p> 
+    <p id="totalCuenta"></p>
 </div>
 
 <script type="module" src="/js/cartPurchase.js"></script>

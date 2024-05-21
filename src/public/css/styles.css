@@ -1,19 +1,18 @@
 body {
-    background-color: #2b7a78; /* Verde azulado para representar el océano */
-    font-family: 'Roboto', sans-serif; /* Fuente moderna y limpia */
-    color: #fff; /* Texto en color blanco para mayor contraste */
-
+    background-color: #1c1c1c; /* Negro para un ambiente más oscuro */
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
 }
 
 /* Estilos de encabezado */
 h1, h2, h3 {
-    font-weight: normal; /* Eliminar negrita para un aspecto más relajado */
-    color: #ff8c42; /* Naranja brillante para acentuar */
+    font-weight: bold; /* Negrita para mayor impacto */
+    color: #ff6347; /* Rojo intenso */
 }
 
 /* Estilos de botón */
 .btn {
-    background-color: #ff8c42; /* Naranja brillante para destacar */
+    background-color: #ff6347;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -22,10 +21,12 @@ h1, h2, h3 {
 }
 
 .btn:hover {
-    background-color: #d95d00; /* Naranja más oscuro al pasar el ratón */
+    background-color: #d95d00;
 }
+
+/* Navegación */
 nav {
-    background-color: #1565c0; /* Azul oscuro */
+    background-color: #000; /* Negro */
     padding: 10px 0;
 }
 
@@ -42,80 +43,85 @@ li {
 
 a {
     text-decoration: none;
-    color: #fff; /* Texto blanco */
+    color: #fff;
     font-weight: bold;
     transition: color 0.3s;
 }
 
 a:hover {
-    color: #ff9800; /* Naranja al pasar el ratón */
+    color: #ff6347;
 }
 
-/* Estilo para las líneas divisorias */
-li.separator {
-    color: #fff;
-    font-size: 18px;
-}
-
-/* Estilo específico para el enlace "Home" */
-li.home a {
-    font-size: 24px;
-}
-
-/* Estilo específico para los enlaces de navegación */
-li a:not(.home) {
-    font-size: 16px;
-}
-
+/* Tarjetas */
 .card-container {
     display: flex;
     flex-wrap: wrap;
-}
-
-.card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-    background-color: #f0f0f0;
-    padding: 10px;
-}
-
-.card-body {
-    padding: 10px;
-}
-
-.card-footer {
-    background-color: #f0f0f0;
-    padding: 10px;
-    text-align: center;
-}
-
-.ticket {
-    background-color: aliceblue;
-    color: black;
-    display: flex;
+    gap: 16px;
     justify-content: center;
-    align-items: center;
-    width: 50%;
-    border-radius: 20px;
     padding: 20px;
 }
 
-#totalCuenta {
-    font-weight: bold;
-    color: #007bff; /* Cambia el color según tus preferencias */
+.card {
+    background-color: #333; /* Gris oscuro */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    margin: 16px;
+    transition: transform 0.2s;
+}
+.card-body img.thumbnail {
+    display: block;
+    margin: 0 auto 10px;
+    max-width: 100%;
+    height: 250px;
+    border-radius: 4px;
 }
 
+.card:hover {
+    transform: scale(1.05);
+}
 
+.card-header {
+    background-color: #222; /* Gris más oscuro */
+    border-bottom: 1px solid #ddd;
+    padding: 16px;
+    text-align: center;
+}
+
+.card-body {
+    padding: 16px;
+    text-align: left;
+}
+
+.card-footer {
+    background-color: #111; /* Negro más intenso */
+    border-top: 1px solid #ddd;
+    padding: 16px;
+    text-align: center;
+}
+
+.card-footer .btn {
+    background-color: #ff6347;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.card-footer .btn:hover {
+    background-color: #d95d00;
+}
+
+/* Introducción */
 .welcome-section {
     position: relative;
     height: 100vh;
-    background-image:url('https://th.bing.com/th/id/OIG3.b8VQ355OHEnIOJF5toy9?pid=ImgGn');
+    background-image: url('https://th.bing.com/th/id/R.4e566de0cd4decf4cccd1a7d06f097ae?rik=bBLhQ1UNzFemZQ&pid=ImgRaw&r=0');
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -123,21 +129,19 @@ li a:not(.home) {
     font-family: Arial, sans-serif;
 }
 
- /* Estilo para la sección de introducción */
- .intro-section {
-    background-color: #fff; /* Fondo blanco */
+.intro-section {
+    background-color: #fff;
     padding: 40px;
     text-align: center;
 }
 
 .intro-title {
     font-size: 28px;
-    color: #1565c0; /* Azul oscuro */
+    color: #ff6347;
     margin-bottom: 10px;
 }
 
 .intro-description {
     font-size: 16px;
-    color: #777; /* Texto gris */
+    color: #777;
 }
-
