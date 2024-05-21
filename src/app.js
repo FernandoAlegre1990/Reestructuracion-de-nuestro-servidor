@@ -10,6 +10,7 @@ import viewsUserRouter from './routers/viewsUser.router.js'
 import mailPurchaseRouter from './routers/mailPurchase.router.js'
 import mockingRouter from './routers/mocking.router.js'
 import loggerTestRouter from './routers/logger.router.js'
+import apiUsersRouter from './routers/apiUsers.router.js'
 import mongoose from 'mongoose'
 import Message from './models/message.model.js'
 import session from 'express-session'
@@ -30,6 +31,7 @@ app.use(express.json()); // middleware para parsear el body de las requests a JS
 
 app.use(errorHandler)
 app.use(express.static('./src/public')); // middleware para servir archivos estáticos
+app.use(express.urlencoded({ extended: true }))
 
 // configuracion de la sesion
 app.use(session({
@@ -55,7 +57,6 @@ app.use(passport.session());
 app.engine('handlebars', handlebars.engine());
 app.set('views', './src/views');
 app.set('view engine', 'handlebars');
-
 
 // Inicialización del servidor
 try {
@@ -83,6 +84,7 @@ try {
   app.use('/chat', chatRouter); // ruta para renderizar la vista de chat
   app.use('/products', viewsRouter); // ruta para renderizar la vista de productos
   app.use('/mockingproducts', mockingRouter); // ruta para generar productos aleatorios con Faker
+  app.use('/api/users', apiUsersRouter); // ruta para cambiar el role del usuario
   app.use('/api/products', productsRouter); // registra el router de productos en la ruta /api/products
   app.use('/api/carts', cartsRouter); // registra el router de carritos en la ruta /api/carts
   app.use('/api/sessions', sessionsRouter); // registra el router de sesiones en la ruta /api/sessions
