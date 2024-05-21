@@ -116,6 +116,13 @@ export const readProductController = async (req, res) => {
 export const readAllProductsController = async (req, res) => {
   logger.http('¡Solicitud recibida!');
 
-  const result = await ProductService.getAllPaginate(req)
+  const { category } = req.query;
+  const filter = {};
+
+  if (category) {
+    filter.category = category;
+  }
+
+  const result = await ProductService.getAllPaginate(req, filter)
   res.status(result.statusCode).json(result.response)
 }

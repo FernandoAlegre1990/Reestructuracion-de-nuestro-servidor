@@ -8,6 +8,7 @@ const router = Router();
 
 const filePathProducts = './src/productos.json';
 
+
 router.get('/', readAllProductsController); // devuelve todos los productos
 
 router.get('/:pid', readProductController); // devuelve un producto

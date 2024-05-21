@@ -32,8 +32,6 @@ export const readCartController = async (req, res) => {
     });
 
     res.status(200).json(productsWithInfo);
-
-    // res.status(200).json(cart.products);
   } catch (error) {
     logger.error('Error al obtener los productos del carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
@@ -43,7 +41,6 @@ export const readCartController = async (req, res) => {
 export const createCartController = async (req, res) => {
   try {
     const newCart = await Cart.create({ products: [] });
-
     res.status(201).json(newCart);
   } catch (error) {
     logger.error('Error al crear el carrito:', error);
@@ -56,60 +53,49 @@ export const addProductCartController = async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
 
-    // Obtén el usuario actual
-    const userId = req.session.user._id; // Obtener el ID del usuario de la sesión
+    const userId = req.session.user._id;
     const user = await User.findById(userId);
 
     //const product = await Product.findById(productId).lean().exec();
-    const product = await ProductService.getById(productId)
+    const product = await ProductService.getById(productId);
 
     if (!product) {
       res.status(404).json({ error: 'Producto no encontrado' });
       return;
     }
 
-    const cart = await Cart.findById(cartId).lean().exec();
+    const cart = await Cart.findById(cartId);
 
     if (!cart) {
       res.status(404).json({ error: 'Carrito no encontrado' });
       return;
     }
 
-    if (product.owner == user.email && user.role == 'premium'){
+    if (product.owner == user.email && user.role == 'premium') {
       res.status(404).json({ error: 'No puedes agregar un producto tuyo al carrito' });
       return;
-    } // ACAAA
+    }
 
     const existingProductIndex = cart.products.findIndex(
       (item) => item.product.toString() === productId
     );
 
     if (existingProductIndex !== -1) {
-      // Si el producto ya está en el carrito, incrementar la cantidad
       cart.products[existingProductIndex].quantity++;
     } else {
-      // Si el producto no está en el carrito, agregarlo con cantidad 1
       cart.products.push({
         product: productId,
-        quantity: 1
+        quantity: 1,
       });
     }
 
-    await Cart.findByIdAndUpdate(cartId, { products: cart.products }).exec();
-
-    // const productsCart = user.cart.products;
-    // productsCart.push({
-    //   product: productId,
-    //   quantity: 1})
-
-    await user.save();
-
+    await cart.save();
     res.status(201).json(cart);
   } catch (error) {
     logger.error('Error al agregar producto al carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
-}
+};
 
 export const updateProductsCartController = async (req, res) => {
   try {
@@ -171,7 +157,7 @@ export const deleteProductCartController = async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
 
-    const cart = await Cart.findById(cartId).lean().exec();
+    const cart = await Cart.findById(cartId).exec();
 
     if (!cart) {
       res.status(404).json({ error: 'Carrito no encontrado' });
@@ -180,6 +166,7 @@ export const deleteProductCartController = async (req, res) => {
 
     // Filtrar los productos y eliminar el producto específico del carrito
     cart.products = cart.products.filter((item) => item.product.toString() !== productId);
+
 
     await Cart.findByIdAndUpdate(cartId, { products: cart.products }).exec();
 
