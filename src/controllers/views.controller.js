@@ -24,6 +24,8 @@ export const readViewsProductsController = async (req, res) => {
       email: req.session.user.email,
       age: req.session.user.age,
       role: req.session.user.role,
+      cart: req.session.user.cart,
+      
     };
 
     // Renderizar la vista de productos y pasar los datos del usuario

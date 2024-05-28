@@ -10,7 +10,7 @@
             <div>
                 <img src="{{this.product.thumbnail}}" alt="{{this.product.title}}" style="max-width: 100px;">
                 <span>Producto: {{this.product.title}} - ${{this.product.price}} - Cantidad: {{this.quantity}}</span>
-                <button class="removeFromCartBtn" data-product-id="{{this.product._id}}" data-cart-id="{{../cid}}">Eliminar</button>
+                <button class="removeProductBtn" data-product-id="{{this.product._id}}" data-cart-id="{{../cid}}">Eliminar</button>
             </div>
         </li>
         <br> <!-- Salto de línea -->
@@ -20,6 +20,7 @@
 
 {{#if products.length}}
     <button id="purchaseBtn" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button>
+    <button id="emptyCartBtn" data-cart-id="{{cid}}">Vaciar Carrito</button>
 {{/if}}
 
 <div id="purchaseResults" class="ticket" style="display: none;">
@@ -30,5 +31,5 @@
     <p id="totalCuenta"></p>
 </div>
 
+<script type="module" src="/js/cart.js"></script>
 <script type="module" src="/js/cartPurchase.js"></script>
-<script type="module" src="/js/cartActions.js"></script>

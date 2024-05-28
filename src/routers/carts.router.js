@@ -8,7 +8,8 @@ import {
   updateProductCartController,
   deleteProductCartController,
   deleteProductsCartController,
-  purchaseCartController 
+  purchaseCartController,
+  emptyCartController
 } from "../controllers/cart.controller.js";
 
 const router = Router();
@@ -36,5 +37,9 @@ router.delete('/:cid', deleteProductsCartController); // Vacía el carrito
 
   // DELETE api/carts/:cid/products/:pid deberá eliminar del carrito el producto seleccionado.
 router.delete('/:cid/products/:pid', deleteProductCartController); // Elimina del carrito el producto seleccionado
+
+router.post('/:cid/empty', emptyCartController);
+
+
 
 export default router;

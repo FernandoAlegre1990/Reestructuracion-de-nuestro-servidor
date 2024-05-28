@@ -20,10 +20,13 @@ import initializePassport from './config/passport.config.js'
 import config from './config/config.js'
 import errorHandler from './middlewares/error.middleware.js'
 import logger from './logger.js'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
 
 const port = config.port
 const mongoURL = config.mongoURL
 const mongoDBName = config.mongoDBName
+
 
 const app = express(); // crea una instancia de una aplicación de express
 
@@ -63,12 +66,12 @@ try {
   await mongoose.connect(mongoURL) // conecta con la base de datos
   const serverHttp = app.listen(port, () => logger.info('server up')) // levanta el servidor en el puerto especificado  
   const io = new Server(serverHttp) // instancia de socket.io
-
+  
   app.use((req, res, next) => {
     req.io = io;
     next();
   }); // middleware para agregar la instancia de socket.io a la request
-
+  
   // Rutas
   app.get('/', (req, res) => {
     if (req.session.user) {
@@ -79,6 +82,21 @@ try {
       res.redirect('/login');
     }
   })
+  
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.1',
+      info: {
+        title: 'Documentación de la API del Ecommerce',
+        description: 'Aqui va la descripcion del proyecto...'
+      }
+    },
+    apis: ['./docs/**/*.yaml']
+  };
+  
+  const specs = swaggerJSDoc(swaggerOptions)
+  app.use('/docs',swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
 
   app.use('/', viewsUserRouter); // registra el router de usuario en la ruta /
   app.use('/chat', chatRouter); // ruta para renderizar la vista de chat

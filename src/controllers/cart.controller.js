@@ -157,25 +157,45 @@ export const deleteProductCartController = async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
 
-    const cart = await Cart.findById(cartId).exec();
+    const cart = await Cart.findById(cartId);
 
     if (!cart) {
-      res.status(404).json({ error: 'Carrito no encontrado' });
-      return;
+      return res.status(404).json({ error: 'Carrito no encontrado' });
     }
 
     // Filtrar los productos y eliminar el producto específico del carrito
     cart.products = cart.products.filter((item) => item.product.toString() !== productId);
 
-
-    await Cart.findByIdAndUpdate(cartId, { products: cart.products }).exec();
+    await cart.save(); // Asegúrate de guardar los cambios en la base de datos
 
     res.status(200).json({ message: 'Producto eliminado del carrito satisfactoriamente' });
   } catch (error) {
     logger.error('Error al eliminar producto del carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
-}
+};
+
+export const emptyCartController = async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+
+    const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      return res.status(404).json({ error: 'Carrito no encontrado' });
+    }
+
+    // Vaciar el array de productos del carrito
+    cart.products = [];
+
+    await cart.save(); // Asegúrate de guardar los cambios en la base de datos
+
+    res.status(200).json({ message: 'Carrito vaciado satisfactoriamente' });
+  } catch (error) {
+    logger.error('Error al vaciar el carrito:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+};
 
 export const deleteProductsCartController = async (req, res) => {
   try {
