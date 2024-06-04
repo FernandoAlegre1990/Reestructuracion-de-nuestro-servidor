@@ -1,12 +1,13 @@
 {
-  "name": "implementacion-de-logger",
+  "name": "implementacion de modulos de testing",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "test": "mocha"
   },
   "keywords": [],
   "author": "Fernando Alegre",
@@ -30,7 +31,6 @@
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",
     "socket.io": "^4.7.4",
-    "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "toastr": "^2.1.4",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "chai": "^5.1.1",
-    "mocha": "^10.4.0"
+    "mocha": "^10.4.0",
+    "supertest": "^7.0.0"
   }
 }
