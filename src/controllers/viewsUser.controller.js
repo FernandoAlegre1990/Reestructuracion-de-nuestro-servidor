@@ -1,4 +1,5 @@
 import logger from '../logger.js'
+import UserModel from '../models/user.model.js'
 
 export const viewsUserRegisterController = (req, res) => {
     if (req.session.user) {
@@ -31,7 +32,23 @@ export const viewsUserProfileController = (req, res) => {
     res.render('profile', userInfo);
 }
 
-export const viewsUserLogoutController = (req, res) => {
+export const viewsUserLogoutController = async (req, res) => {
+    if (req.session.user) {
+        try {
+            // Obtén el usuario actual desde la base de datos utilizando su ID
+            const userId = req.session.user._id;
+            const user = await UserModel.findById(userId);
+
+            if (user) {
+                // Actualiza la propiedad "last_connection" con la fecha y hora actual
+                user.last_connection = new Date();
+                await user.save();
+            }
+        } catch (error) {
+            logger.error(error.message);
+        }
+    }
+
     // Destruir la sesión actual del usuario
     req.session.destroy((err) => {
         if (err) {

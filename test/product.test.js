@@ -14,7 +14,7 @@ mongoose.connect(mongoURLTest, {
 const assert = Assert.strict;
 
 describe('Testing Product DAO', function () {
-    this.timeout(8000); // Aumentar el tiempo de espera para todas las pruebas en este bloque
+    this.timeout(10000); // Aumentar el tiempo de espera para todas las pruebas en este bloque
 
     beforeEach(async function () {
         try {

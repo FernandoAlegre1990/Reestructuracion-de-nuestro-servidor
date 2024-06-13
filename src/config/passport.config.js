@@ -74,6 +74,9 @@ const initializePassport = () => {
         return done(null, false, { message: 'Credenciales inválidas.' });
       }
 
+      user.last_connection = new Date();
+      await user.save();
+
       const userSession = {
         _id: user._id,
         first_name: user.first_name,
