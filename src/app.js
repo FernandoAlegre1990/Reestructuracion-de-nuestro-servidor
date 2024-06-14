@@ -22,6 +22,7 @@ import errorHandler from './middlewares/error.middleware.js'
 import logger from './logger.js'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
+import multer from 'multer'
 
 const port = config.port
 const mongoURL = config.mongoURL
@@ -35,6 +36,27 @@ app.use(express.json()); // middleware para parsear el body de las requests a JS
 app.use(errorHandler)
 app.use(express.static('./src/public')); // middleware para servir archivos estáticos
 app.use(express.urlencoded({ extended: true }))
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      const { type } = req.body;
+      if (type === 'profile') {
+          cb(null, 'src/public/uploads/profiles');
+      } else if (type === 'product') {
+          cb(null, 'src/public/uploads/products');
+      } else if (type === 'document') {
+          cb(null, 'src/public/uploads/documents');
+      } else {
+          cb(null, 'src/public/uploads/other');
+      }
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
 
 // configuracion de la sesion
 app.use(session({
@@ -102,7 +124,7 @@ try {
   app.use('/chat', chatRouter); // ruta para renderizar la vista de chat
   app.use('/products', viewsRouter); // ruta para renderizar la vista de productos
   app.use('/mockingproducts', mockingRouter); // ruta para generar productos aleatorios con Faker
-  app.use('/api/users', apiUsersRouter); // ruta para cambiar el role del usuario
+  app.use('/api/users', upload.array('files', 20), apiUsersRouter); // ruta para cambiar el role del usuario
   app.use('/api/products', productsRouter); // registra el router de productos en la ruta /api/products
   app.use('/api/carts', cartsRouter); // registra el router de carritos en la ruta /api/carts
   app.use('/api/sessions', sessionsRouter); // registra el router de sesiones en la ruta /api/sessions
