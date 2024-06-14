@@ -3,6 +3,15 @@ import UserModel from "../models/user.model.js";
 
 const router = Router();
 
+router.get('/', async (req, res) => {
+    try {
+        const users = await UserModel.find();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 router.put('/premium/:uid', async (req, res) => {
     const uid = req.params.uid;
     const { role } = req.body;
