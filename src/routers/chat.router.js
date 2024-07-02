@@ -1,11 +1,8 @@
 import { Router } from "express"
-import config from '../config/config.js'
+import { chatController } from '../controllers/chat.controller.js'
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    const userAdminControl = req.session.user.email != config.adminEmail ? true : false;
-    res.render('chat', { email: userAdminControl });
-})
+router.get('/', chatController)
 
 export default router;

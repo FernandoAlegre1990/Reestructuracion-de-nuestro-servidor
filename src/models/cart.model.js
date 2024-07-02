@@ -2,26 +2,26 @@ import mongoose from 'mongoose';
 
 const cartSchema = new mongoose.Schema({
     products: [{
-        _id: false,
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'products',
             required: true
         },
-        title: String, // Mover al interior del objeto 'product'
+        title: String,
         quantity: {
             type: Number,
             required: true
         }
-    }],
-    default: []
+    }]
 });
 
-cartSchema.pre("findOne", function(){
-    this.populate("products.product");
-})
+// Utilizar populate en findById
+cartSchema.statics.findByIdWithPopulate = function(id) {
+    return this.findById(id)
+        .populate('products.product')
+        .exec();
+};
 
-mongoose.set('strictQuery', false);
 const cartModel = mongoose.model('carts', cartSchema);
 
 export default cartModel;

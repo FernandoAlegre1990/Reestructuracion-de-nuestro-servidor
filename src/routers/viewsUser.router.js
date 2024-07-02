@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { isAuthenticated } from "../public/js/authMiddleware.js";
+import { isAuthenticated, isAdmin } from "../public/js/authMiddleware.js";
 import { 
     viewsUserRegisterController,
     viewsUserLoginController,
     viewsUserProfileController,
     viewsUserLogoutController,
-    viewsUserForgetPasswordController 
+    viewsUserForgetPasswordController,
+    viewUserStateController 
 } from "../controllers/viewsUser.controller.js";
 
 const router = Router();
@@ -23,5 +24,7 @@ router.get('/profile', isAuthenticated, viewsUserProfileController); // Ruta par
 router.get('/logout', isAuthenticated, viewsUserLogoutController); // Ruta para cerrar sesión
 
 router.get('/forget-password', viewsUserForgetPasswordController);
+
+router.get('/users', isAdmin, viewUserStateController) // ACA SE MUESTRAN LOS USUARIOS <=
 
 export default router;

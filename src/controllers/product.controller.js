@@ -3,34 +3,25 @@ import CustomError from "../services/errors/custom_error.js";
 import EErros from "../services/errors/enums.js";
 import { generateProductErrorInfo } from "../services/errors/info.js";
 import logger from '../logger.js'
+import { sendDeletedProductEmail } from './mail.controller.js';
 
-export const createProductController = async (req, res) => {
+export const createProductController = async (req, res, next) => {
   try {
-    const product = req.body
+    const product = req.body;
     if (!product.title || !product.price || !product.description || !product.code || !product.stock || !product.category) {
       const errorInfo = generateProductErrorInfo(product);
-      CustomError.createError({
-        name: "Product creation Error",
-        cause: errorInfo,
-        message: "Error typing to create a product",
-        code: EErros.INVALID_TYPES_ERROR
-      })
-      logger.error(errorInfo)
+      
     }
 
-    //const result = await Product.create(product);
-    const result = await ProductService.create(product)
+    const result = await ProductService.create(product);
+    const products = await ProductService.getAll();
 
-    //const products = await Product.find().lean().exec();
-    const products = await ProductService.getAll()
-
-    req.io.emit('productList', products); // emite el evento updatedProducts con la lista de productos
+    req.io.emit('productList', products); // Emite el evento updatedProducts con la lista de productos
     res.status(201).json({ status: 'success', payload: result });
   } catch (error) {
-    logger.error(error.cause)
-    res.status(500).json({ status: 'error', error: error.cause });
+    next(error);  // Pasa el error al middleware de manejo de errores
   }
-}
+};
 
 export const updateProductController = async (req, res) => {
   try {
@@ -63,39 +54,45 @@ export const deleteProductController = async (req, res) => {
   try {
     const productId = req.params.pid;
 
-    const product = await ProductService.getById(productId)
-    const userInfo = {
-      first_name: req.session.user.first_name,
-      last_name: req.session.user.last_name,
-      email: req.session.user.email,
-      age: req.session.user.age,
-      role: req.session.user.role,
-    };
+    // Obtener el producto a eliminar
+    const product = await ProductService.getById(productId);
 
-    if (product.owner != userInfo.email && userInfo.role == 'premium'){
-      res.status(404).json({ error: 'No puedes eliminar este producto' })
-      return;
-    }
-
-    //const deletedProduct = await Product.findByIdAndDelete(productId).lean().exec();
-    const deletedProduct = await ProductService.delete(productId)
-
-    if (!deletedProduct) {
+    if (!product) {
       res.status(404).json({ error: 'Producto no encontrado' });
       return;
     }
 
-    //const products = await Product.find().lean().exec();
-    const products = await ProductService.getAll();
+    const userInfo = {
+      email: req.session.user.email,
+      role: req.session.user.role,
+    };
 
-    req.io.emit('productList', products);
+    if (userInfo.role === 'admin' || product.owner === userInfo.email) {
+      // El usuario es un administrador o el propietario del producto, puede eliminarlo
+      const deletedProduct = await ProductService.delete(productId);
 
-    res.status(200).json({ message: 'Producto eliminado' });
+      if (!deletedProduct) {
+        res.status(404).json({ error: 'Producto no encontrado' });
+        return;
+      }
+
+      // Enviar un correo electrónico al propietario del producto
+      const emailResult = await sendDeletedProductEmail(product, userInfo.email);
+
+      // Actualizar la lista de productos
+      const products = await ProductService.getAll();
+      req.io.emit('productList', products);
+
+      res.status(200).json({ message: 'Producto eliminado', emailStatus: emailResult });
+    } else {
+      // El usuario no tiene permisos para eliminar este producto
+      res.status(403).json({ error: 'No tienes permisos para eliminar este producto' });
+    }
   } catch (error) {
     logger.error('Error al eliminar el producto:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
-}
+};
 
 export const readProductController = async (req, res) => {
   const id = req.params.pid;
@@ -116,13 +113,6 @@ export const readProductController = async (req, res) => {
 export const readAllProductsController = async (req, res) => {
   logger.http('¡Solicitud recibida!');
 
-  const { category } = req.query;
-  const filter = {};
-
-  if (category) {
-    filter.category = category;
-  }
-
-  const result = await ProductService.getAllPaginate(req, filter)
+  const result = await ProductService.getAllPaginate(req)
   res.status(result.statusCode).json(result.response)
 }

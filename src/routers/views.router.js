@@ -7,7 +7,8 @@ import {
   readViewsProductsController, 
   readViewsRealTimeProductsController, 
   readViewsProductController,
-  readViewsCartController 
+  readViewsCartController,
+
 } from "../controllers/views.controller.js";
 
 const router = Router();
@@ -16,8 +17,9 @@ router.get('/', isAuthenticated, readViewsProductsController); // Devuelve todos
   
 router.get('/realtimeproducts', isAuthenticated, isAdminOrPremium, readViewsRealTimeProductsController); // Devuelve todos los productos en tiempo real
 
-router.get('/:cid', isAuthenticated, readViewsProductController) // Devuelve un producto según su id
+router.get('/:pid', isAuthenticated, readViewsProductController) // Devuelve un producto según su id
 
-router.get('/carts/:cid', isAuthenticated, readViewsCartController) // Devuelve un carrito según su id
-  
+router.get('/carts/:cid', isAuthenticated, readViewsCartController);
+
+ 
 export default router;

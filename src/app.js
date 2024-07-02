@@ -11,6 +11,7 @@ import mailPurchaseRouter from './routers/mailPurchase.router.js'
 import mockingRouter from './routers/mocking.router.js'
 import loggerTestRouter from './routers/logger.router.js'
 import apiUsersRouter from './routers/apiUsers.router.js'
+import paymentsRouter from './routers/payments.router.js'
 import mongoose from 'mongoose'
 import Message from './models/message.model.js'
 import session from 'express-session'
@@ -23,10 +24,17 @@ import logger from './logger.js'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
 import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import viewsCartsRouter from './routers/viewsCart.router.js';
 
 const port = config.port
 const mongoURL = config.mongoURL
 const mongoDBName = config.mongoDBName
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 const app = express(); // crea una instancia de una aplicación de express
@@ -81,6 +89,8 @@ app.use(passport.session());
 // configuracion del motor de plantillas handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', './src/views');
+partialsDir: path.join(__dirname, 'views/partials'),
+
 app.set('view engine', 'handlebars');
 
 // Inicialización del servidor
@@ -130,6 +140,10 @@ try {
   app.use('/api/sessions', sessionsRouter); // registra el router de sesiones en la ruta /api/sessions
   app.use('/sendMailPurchase', mailPurchaseRouter); // ruta utilizada para enviar el detalle de la compra
   app.use('/loggerTest', loggerTestRouter); // ruta utilizada para probar el log
+  app.use('/payments', paymentsRouter); // ruta utilizada para probar el pago usando Stripe
+  app.use('/carts', viewsCartsRouter);
+
+
 
   io.on('connection', socket => {
     logger.info('Nuevo cliente conectado!')
