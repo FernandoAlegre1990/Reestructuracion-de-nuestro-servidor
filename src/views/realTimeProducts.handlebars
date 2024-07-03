@@ -1,47 +1,96 @@
-<h2>Productos en tiempo real</h2>
-<hr />
-<form id="createForm">
-    <label for="name">Nombre</label>
-    <input type="text" name="name" id="title" placeholder="Nombre del producto" required>
-    <label for="description">Descripción</label>
-    <input type="text" name="description" id="description" placeholder="Descripción del producto" required>
-    <label for="price">Precio</label>
-    <input type="number" name="price" id="price" placeholder="Precio del producto" required>
-    <label for="code">Código</label>
-    <input type="text" name="code" id="code" placeholder="Código del producto" required>
-    <label for="stock">Stock</label>
-    <input type="number" name="stock" id="stock" placeholder="Stock del producto" required>
-    <label for="category">Categoría</label>
-    <input type="text" name="category" id="category" placeholder="Categoría del producto" required>
-</form>
-<button id="createBtn" data-email={{this.userInfo.email}} data-role={{this.userInfo.role}}>Crear producto</button>
-<hr />
-<table id="realProductsTable">
-    <thead>
-        <tr>
-            <td>Producto</td>
-            <td>Descripción</td>
-            <td>Precio</td>
-            <td>Código</td>
-            <td>Stock</td>
-            <td>Categoria</td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-    {{#each this.products}}
-        <tr>
-            <td>{{this.title}}</td>
-            <td>{{this.description}}</td>
-            <td>{{this.price}}</td>
-            <td>{{this.code}}</td>
-            <td>{{this.stock}}</td>
-            <td>{{this.category}}</td>
-            <td><button onclick="deleteProduct('{{this._id}}')">Eliminar</button></td>
-        </tr>
-    {{/each}}
-    </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos en tiempo real</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Productos en tiempo real</h2>
+        <hr />
+        <div class="form-container mb-4">
+            <form id="createForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Nombre</label>
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Nombre del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <input type="text" class="form-control" name="description" id="description" placeholder="Descripción del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Precio</label>
+                    <input type="number" class="form-control" name="price" id="price" placeholder="Precio del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="code">Código</label>
+                    <input type="text" class="form-control" name="code" id="code" placeholder="Código del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" class="form-control" name="stock" id="stock" placeholder="Stock del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Categoría</label>
+                    <input type="text" class="form-control" name="category" id="category" placeholder="Categoría del producto" required>
+                </div>
+                <div class="form-group">
+                    <label for="thumbnail">Imagen</label>
+                    <input type="file" class="form-control-file" name="thumbnail" id="thumbnail" accept="image/*">
+                </div>
+                <button type="submit" id="createBtn" class="btn btn-primary" data-email="{{this.userInfo.email}}" data-role="{{this.userInfo.role}}">Crear producto</button>
+            </form>
+        </div>
+        <hr />
+        <table class="table table-striped" id="realProductsTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Código</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each this.products}}
+                <tr>
+                    <td><img src="{{this.thumbnail}}" alt="{{this.title}}" class="product-image"></td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.code}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>{{this.category}}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteProduct('{{this._id}}')">Eliminar</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

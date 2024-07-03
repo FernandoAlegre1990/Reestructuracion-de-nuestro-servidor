@@ -24,33 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         listItem.textContent = `ID: ${product.product._id} - Titulo: ${product.product.title} - Cantidad: ${product.quantity} - Precio: ${product.product.price}`;
                         purchasedProductsList.appendChild(listItem);
                     });
-                    console.log(responseData.purchasedProducts)
 
                     responseData.unprocessedProducts.forEach(product => {
                         const listItem = document.createElement('li');
                         listItem.textContent = `ID: ${product.product._id} - Titulo: ${product.product.title} - Cantidad: ${product.quantity} - Precio: ${product.product.price}`;
                         notPurchasedProductsList.appendChild(listItem);
                     });
-                    console.log(responseData.unprocessedProducts)
+
                     purchaseResults.style.display = 'block';
 
-                    const productosComprados = responseData.purchasedProducts
-
                     // Calcula el total de la cuenta
-function calcularTotal(productos) {
-    let total = 0;
-    productos.forEach(producto => {
-        total += producto.product.price * producto.quantity;
-    });
-    return total;
-}
+                    const totalCuenta = responseData.purchasedProducts.reduce((total, product) => {
+                        return total + (product.product.price * product.quantity);
+                    }, 0);
 
-// Llama a la función con los productos comprados
-const totalCuenta = calcularTotal(responseData.purchasedProducts);
-
-// Muestra el total en tu vista 
-const totalCuentaElement = document.getElementById('totalCuenta');
-totalCuentaElement.textContent = `Total: $${totalCuenta.toFixed(2)}`;
+                    // Muestra el total en tu vista 
+                    const totalCuentaElement = document.getElementById('totalCuenta');
+                    totalCuentaElement.textContent = `Total: $${totalCuenta.toFixed(2)}`;
 
                     // Después de mostrar los resultados, enviar el correo electrónico
                     const mailUser = purchaseBtn.getAttribute('data-mail-user');
@@ -59,7 +49,7 @@ totalCuentaElement.textContent = `Total: $${totalCuenta.toFixed(2)}`;
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(productosComprados)
+                        body: JSON.stringify(responseData.purchasedProducts)
                     });
 
                     if (sendMailResponse.ok) {

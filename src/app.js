@@ -28,7 +28,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import viewsCartsRouter from './routers/viewsCart.router.js';
-
+import stripe from 'stripe'
 const port = config.port
 const mongoURL = config.mongoURL
 const mongoDBName = config.mongoDBName
@@ -39,10 +39,11 @@ const __dirname = dirname(__filename);
 
 const app = express(); // crea una instancia de una aplicación de express
 
+
 app.use(express.json()); // middleware para parsear el body de las requests a JSON
 
 app.use(errorHandler)
-app.use(express.static('./src/public')); // middleware para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }))
 
 const storage = multer.diskStorage({
@@ -89,7 +90,9 @@ app.use(passport.session());
 // configuracion del motor de plantillas handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', './src/views');
+app.set('views', path.join(__dirname, 'views'));
 partialsDir: path.join(__dirname, 'views/partials'),
+
 
 app.set('view engine', 'handlebars');
 

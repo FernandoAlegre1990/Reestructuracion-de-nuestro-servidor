@@ -1,76 +1,72 @@
-<div>
-    <h1>Inicio de Sesión</h1>
-    <form method="POST" id="loginForm">
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Iniciar Sesión</button>
-    </form>
-     <hr>
-    <button onclick="location.href='/register'">Registrate</button>
-</div>
-<hr>
-<div>
-    <a href="/api/sessions/github">Entrár con GitHub</a>
-</div>
-<hr>
-<button onclick="location.href='/forget-password'">Olvidé la contraseña</button>
-<style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('https://wallpaperaccess.com/full/4446962.png');
-            background-size: cover;
-            font-family: Arial, sans-serif;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
         }
-
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            color: #333; /* Texto oscuro */
+        .login-card {
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: white;
         }
-
-        h1 {
-            font-size: 24px;
-            color: #ff6347; /* Rojo intenso */
-            margin-bottom: 20px;
+        .login-card h1 {
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        input[type="email"],
-        input[type="password"] {
+        .btn-custom {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            margin-top: 1rem;
         }
-
-        button[type="submit"] {
-            background-color: #ff6347;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.2s;
+        .alternative-login {
+            text-align: center;
+            margin-top: 1rem;
         }
-
-        button[type="submit"]:hover {
-            background-color: #d95d00; /* Naranja más oscuro al pasar el ratón */
+        .alternative-login a {
+            color: #6a11cb;
+            text-decoration: none;
+        }
+        .alternative-login a:hover {
+            text-decoration: underline;
         }
     </style>
-<script src="/js/login.js"></script>
-
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Inicio de Sesión</h1>
+            <form method="POST" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-custom">Iniciar Sesión</button>
+            </form>
+            <div class="alternative-login">
+                <hr>
+                <button class="btn btn-secondary btn-custom" onclick="location.href='/register'">Registrate</button>
+                <a href="/api/sessions/github" class="btn btn-link btn-custom">Entrar con GitHub</a>
+                <button class="btn btn-link btn-custom" onclick="location.href='/forget-password'">Olvidé la contraseña</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+</html>

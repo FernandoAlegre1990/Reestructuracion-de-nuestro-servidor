@@ -1,7 +1,10 @@
 body {
-    background-color: #1c1c1c; /* Negro para un ambiente más oscuro */
     font-family: 'Roboto', sans-serif;
     color: #fff;
+    background-image: url('https://th.bing.com/th/id/R.93406b1c7545e4bda2027bc9f132226a?rik=J0rzs%2bsUU8JqNQ&pid=ImgRaw&r=0');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
 }
 
 /* Estilos de encabezado */
@@ -52,14 +55,7 @@ a:hover {
     color: #ff6347;
 }
 
-/* Tarjetas */
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-    padding: 20px;
-}
+
 
 .card {
     background-color: #333; /* Gris oscuro */
@@ -116,34 +112,4 @@ a:hover {
 .card-footer .btn:hover {
     background-color: #d95d00;
 }
-
-/* Introducción */
-.welcome-section {
-    position: relative;
-    height: 100vh;
-    background-image: url('https://th.bing.com/th/id/R.4e566de0cd4decf4cccd1a7d06f097ae?rik=bBLhQ1UNzFemZQ&pid=ImgRaw&r=0');
-    background-size: cover;
-    background-position: center;
-    text-align: center;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-.intro-section {
-    background-color: #fff;
-    padding: 40px;
-    text-align: center;
-}
-
-.intro-title {
-    font-size: 28px;
-    color: #ff6347;
-    margin-bottom: 10px;
-}
-
-.intro-description {
-    font-size: 16px;
-    color: #777;
-}
-
 

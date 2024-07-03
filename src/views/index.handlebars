@@ -1,6 +1,67 @@
-<div  class="welcome-section">
-   <div class="intro-section">
-        <h1 class="intro-title">Welcome </h1>
-       
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+        .welcome-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+        .intro-section {
+            max-width: 800px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .intro-title {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .intro-text {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+        .btn-custom {
+            margin-top: 2rem;
+            background-color: #fff;
+            color: #6a11cb;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #6a11cb;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-section">
+        <div class="intro-section">
+            <h1 class="intro-title">¡Bienvenido!</h1>
+            <p class="intro-text">Nos alegra tenerte aquí. Explora nuestros productos y encuentra lo que necesitas.</p>
+            <button class="btn btn-custom" onclick="location.href='/products'">Ver Productos</button>
+        </div>
     </div>
-</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

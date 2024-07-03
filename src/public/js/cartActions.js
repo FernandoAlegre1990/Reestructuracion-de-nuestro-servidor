@@ -1,9 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
-    loadRemoveFromCartButtons();
-});
-
 function loadRemoveFromCartButtons() {
-    const removeFromCartButtons = document.querySelectorAll('.removeFromCartBtn');
+    const removeFromCartButtons = document.querySelectorAll('.removeProductBtn');
 
     removeFromCartButtons.forEach(button => {
         button.addEventListener('click', async () => {
@@ -20,7 +16,7 @@ function loadRemoveFromCartButtons() {
                     console.log('Producto eliminado del carrito');
                     alert('Producto eliminado del carrito');
                     // Eliminar el producto del DOM
-                    button.closest('li').remove();
+                    button.closest('li').remove(); // Asegúrate de que el elemento LI se elimine correctamente
                 } else {
                     console.error('Error al eliminar producto del carrito:', response.statusText);
                     alert('Error al eliminar producto del carrito');

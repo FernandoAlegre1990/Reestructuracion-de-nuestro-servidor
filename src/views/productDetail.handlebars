@@ -1,32 +1,65 @@
-<div>
-    <h2><img src="{{this.product.thumbnail}}" alt="{{this.product.title}}" style="max-width: 150px;"> {{this.product.title}}</h2>
-    <hr />
-    <table>
-        <thead>
-            <tr>
-                <td>Descripción</td>
-                <td>Precio</td>
-                <td>Código</td>
-                <td>Stock</td>
-                <td>Categoría</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{this.product.description}}</td>
-                <td>{{this.product.price}}</td>
-                <td>{{this.product.code}}</td>
-                <td>{{this.product.stock}}</td>
-                <td>{{this.product.category}}</td>
-                {{#if this.userAdminControl}}
-                <td>
-                    <button class="addToCartBtn" cID={{this.cartID}} data-product-id={{this.product._id}}>Agregar al carrito</button>
-                </td>
-                {{/if}}
-            </tr>
-        </tbody>
-    </table>
-</div>
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Producto</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-container {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #343a40;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .product-table th, .product-table td {
+            vertical-align: middle;
+            color: white;
+            font-weight: bold;
+        }
+        .product-image {
+            max-width: 100px;
+        }
+        .product-title {
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container product-container">
+        <h2 class="product-title">Detalles del Producto</h2>
+        <hr />
+        <table class="table table-striped product-table">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Código</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="{{this.product.thumbnail}}" alt="{{this.product.title}}" class="product-image"></td>
+                    <td>{{this.product.title}}</td>
+                    <td>{{this.product.description}}</td>
+                    <td>${{this.product.price}}</td>
+                    <td>{{this.product.code}}</td>
+                    <td>{{this.product.stock}}</td>
+                    <td>{{this.product.category}}</td>
+                    <td>
+                        {{#if this.userAdminControl}}
+                        <button class="btn btn-primary addToCartBtn" data-product-id="{{this.product._id}}" data-cart-id="{{this.cartID}}">Agregar al carrito</button>
+                        {{/if}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 <script src="/js/addProductCart.js"></script>
-

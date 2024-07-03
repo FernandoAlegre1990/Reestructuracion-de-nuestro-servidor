@@ -25,7 +25,7 @@ router.get('/:cid/purchase', purchaseCartController); // Ruta para finalizar la 
   
 router.post('/', createCartController); // Crea un carrito
   
-router.post('/:cid/product/:pid', addProductCartController); // Agrega un producto al carrito
+router.post('/:cid/products/:pid', addProductCartController); // Agrega un producto al carrito
 
 // PUT api/carts/:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba.
 router.put('/:cid', updateProductsCartController); // Actualiza el carrito con un arreglo de productos

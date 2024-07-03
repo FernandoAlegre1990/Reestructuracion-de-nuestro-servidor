@@ -2,7 +2,7 @@ import { Router } from "express";
 import fs from 'fs';
 import Product from '../models/product.model.js';
 import { paginate } from "mongoose-paginate-v2";
-import { createProductController, readProductController, readAllProductsController, updateProductController, deleteProductController } from "../controllers/product.controller.js";
+import { createProductController, readProductController, readAllProductsController, updateProductController, deleteProductController, getProductsByCategory } from "../controllers/product.controller.js";
 
 const router = Router();
 
@@ -18,5 +18,8 @@ router.post('/', createProductController); // crea un producto
 router.put('/:pid', updateProductController); // actualiza un producto
 
 router.delete('/:pid', deleteProductController); // elimina un producto
+
+router.get('/api/products', getProductsByCategory);
+
 
 export default router; 

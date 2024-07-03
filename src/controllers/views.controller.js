@@ -32,7 +32,9 @@ export const readViewsProductsController = async (req, res) => {
     console.log('User Cart:', userCart ? userCart._id : null);
 
     res.render('home', { 
-      ...products, 
+      products: products.docs,
+      prevLink: products.prevLink,
+      nextLink: products.nextLink,
       userInfo, 
       cart: userCart ? userCart._id : 'dummyCartId'  // Adding dummyCartId for testing
     });
@@ -41,8 +43,6 @@ export const readViewsProductsController = async (req, res) => {
     res.status(500).json({ error: 'Error al leer los productos' });
   }
 };
-
-
 export const readViewsRealTimeProductsController = async (req, res) => {
   try {
     //const products = await ProductModel.find().lean().exec();
@@ -60,32 +60,60 @@ export const readViewsRealTimeProductsController = async (req, res) => {
 
 export const readViewsProductController = async (req, res) => {
   try {
-    const id = req.params.cid
-    //const result = await ProductModel.findById(id).lean().exec();
-    const result = await ProductService.getById(id)
+    const id = req.params.pid; // Obtener el ID del parámetro de la URL
+    const result = await ProductService.getById(id); // Obtener el producto por su ID usando el servicio ProductService
+
+    if (!result) {
+      // Si no se encuentra el producto, devolver un error 404
+      return res.status(404).json({ status: 'error', error: 'Product not found' });
+    }
+
+    // Obtener información del carrito desde la sesión del usuario
     const cartInfo = {
       cart: req.session.user.cart,
     };
 
-    const userAdminControl = req.session.user.email != config.adminEmail ? true : false;
+    // Determinar si el usuario es administrador o no (para control de acceso)
+    const userAdminControl = req.session.user.email !== config.adminEmail;
 
-    if (result === null) {
-      return res.status(404).json({ status: 'error', error: 'Product not found' });
-    }
-    res.render('productDetail', { product: result, cartID: cartInfo.cart, userAdminControl: userAdminControl });
+    // Renderizar la vista 'productDetail' y pasar los datos del producto y la información del carrito
+    res.render('productDetail', {
+      product: result, // Pasar el producto encontrado
+      cartID: cartInfo.cart, // Pasar el ID del carrito desde la sesión del usuario
+      userAdminControl: userAdminControl // Pasar la bandera de control de administrador
+    });
   } catch (error) {
+    // Manejar cualquier error y devolver un error 500 en caso de falla
+    console.error('Error al leer el producto:', error);
     res.status(500).json({ error: 'Error al leer los productos' });
   }
-}
+};
 
 export const readViewsCartController = async (req, res) => {
-  const userInfo = {
-    first_name: req.session.user.first_name,
-    last_name: req.session.user.last_name,
-    email: req.session.user.email,
-    age: req.session.user.age,
-    cart: req.session.user.cart,
+  try {
+      const id = req.params.cid;
+      const cart = await cartModel.findById(id).populate('products.product').exec();
+      
+      if (!cart) {
+          return res.status(404).json({ status: 'error', error: 'Cart not found' });
+      }
+      
+      // Mapear los productos para obtener los datos necesarios
+      const products = cart.products.map(item => ({
+          title: item.product.title,
+          thumbnail: item.product.thumbnail,
+          price: item.product.price,
+          quantity: item.quantity
+      }));
+
+      // Renderizar la vista 'carts' y pasar los datos al template
+      res.render('carts', { 
+          cid: cart._id, 
+          products: products,
+          mailUser: req.session.user.email
+      });
+      
+  } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+  }
 };
-logger.debug('UserInfo:', userInfo);
-res.render('carts', userInfo);
-}

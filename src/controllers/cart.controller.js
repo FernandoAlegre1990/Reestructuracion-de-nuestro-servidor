@@ -53,49 +53,60 @@ export const addProductCartController = async (req, res) => {
     const cartId = req.params.cid;
     const productId = req.params.pid;
 
-    const userId = req.session.user._id;
+    // Obtén el usuario actual
+    const userId = req.session.user._id; // Obtener el ID del usuario de la sesión
     const user = await User.findById(userId);
 
     //const product = await Product.findById(productId).lean().exec();
-    const product = await ProductService.getById(productId);
+    const product = await ProductService.getById(productId)
 
     if (!product) {
       res.status(404).json({ error: 'Producto no encontrado' });
       return;
     }
 
-    const cart = await Cart.findById(cartId);
+    const cart = await Cart.findById(cartId).lean().exec();
 
     if (!cart) {
       res.status(404).json({ error: 'Carrito no encontrado' });
       return;
     }
 
-    if (product.owner == user.email && user.role == 'premium') {
+    if (product.owner == user.email && user.role == 'premium'){
       res.status(404).json({ error: 'No puedes agregar un producto tuyo al carrito' });
       return;
-    }
+    } // ACAAA
 
     const existingProductIndex = cart.products.findIndex(
       (item) => item.product.toString() === productId
     );
 
     if (existingProductIndex !== -1) {
+      // Si el producto ya está en el carrito, incrementar la cantidad
       cart.products[existingProductIndex].quantity++;
     } else {
+      // Si el producto no está en el carrito, agregarlo con cantidad 1
       cart.products.push({
         product: productId,
-        quantity: 1,
+        quantity: 1
       });
     }
 
-    await cart.save();
+    await Cart.findByIdAndUpdate(cartId, { products: cart.products }).exec();
+
+    // const productsCart = user.cart.products;
+    // productsCart.push({
+    //   product: productId,
+    //   quantity: 1})
+
+    await user.save();
+
     res.status(201).json(cart);
   } catch (error) {
     logger.error('Error al agregar producto al carrito:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
-};
+}
 
 export const updateProductsCartController = async (req, res) => {
   try {

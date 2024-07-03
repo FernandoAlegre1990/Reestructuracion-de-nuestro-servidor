@@ -8,7 +8,7 @@ import { sendDeletedProductEmail } from './mail.controller.js';
 export const createProductController = async (req, res, next) => {
   try {
     const product = req.body;
-    if (!product.title || !product.price || !product.description || !product.code || !product.stock || !product.category) {
+    if (!product.title || !product.price || !product.description || !product.code || !product.stock || !product.category ||!product.thumbnail) {
       const errorInfo = generateProductErrorInfo(product);
       
     }
@@ -116,3 +116,15 @@ export const readAllProductsController = async (req, res) => {
   const result = await ProductService.getAllPaginate(req)
   res.status(result.statusCode).json(result.response)
 }
+
+
+export const getProductsByCategory = async (req, res) => {
+  try {
+      const category = req.query.category;
+      const filter = category ? { category } : {};
+      const products = await Product.find(filter).lean();
+      res.json({ products });
+  } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos' });
+  }
+};
