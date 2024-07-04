@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { isAdmin } from '../public/js/authMiddleware.js';
-import { apiUsersGetUsers, apiUsersChangeRole, apiUsersUploadDocuments, apiUsersDeleteInactiveUsers, apiUsersDeleteUser } from '../controllers/apiUsers.controller.js'
+import { apiUsersGetUsers, apiUsersChangeRole, apiUsersUploadDocuments, apiUsersDeleteInactiveUsers, apiUsersDeleteUser, apiGetUser } from '../controllers/apiUsers.controller.js'
 
 
 const router = Router();
 
 router.get('/', isAdmin, apiUsersGetUsers);
+
+router.get('/:uid', apiGetUser)
 
 router.put('/premium/:uid', isAdmin, apiUsersChangeRole);
 

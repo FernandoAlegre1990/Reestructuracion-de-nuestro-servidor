@@ -1,69 +1,36 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const purchaseBtn = document.getElementById('purchaseBtn');
-    const purchaseResults = document.getElementById('purchaseResults');
-    const purchasedProductsList = document.getElementById('purchasedProducts');
-    const notPurchasedProductsList = document.getElementById('notPurchasedProducts');
+document.getElementById('purchaseBtn').addEventListener('click', async () => {
+    try {
+        const cartId = document.getElementById('purchaseBtn').getAttribute('data-cart-id');
+        
+        const response = await fetch(`/api/carts/${cartId}`);
+        const cartData = await response.json();
 
-    if (purchaseBtn) {
-        const cartId = purchaseBtn.getAttribute('data-cart-id');
+        const items = cartData.products.map(product => ({
+            name: product.product.title,  // Asegúrate de que este campo exista en tus datos
+            description: product.product.description,  // Asegúrate de que este campo exista en tus datos
+            price: product.product.price,  // Asegúrate de que este campo exista en tus datos
+            quantity: product.quantity  // Asegúrate de que este campo exista en tus datos
+        }));
 
-        purchaseBtn.addEventListener('click', async () => {
-            try {
-                const response = await fetch(`/api/carts/${cartId}/purchase`, {
-                    method: 'GET'
-                });
-
-                if (response.ok) {
-                    const responseData = await response.json();
-
-                    purchasedProductsList.innerHTML = '';
-                    notPurchasedProductsList.innerHTML = '';
-
-                    responseData.purchasedProducts.forEach(product => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = `ID: ${product.product._id} - Titulo: ${product.product.title} - Cantidad: ${product.quantity} - Precio: ${product.product.price}`;
-                        purchasedProductsList.appendChild(listItem);
-                    });
-
-                    responseData.unprocessedProducts.forEach(product => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = `ID: ${product.product._id} - Titulo: ${product.product.title} - Cantidad: ${product.quantity} - Precio: ${product.product.price}`;
-                        notPurchasedProductsList.appendChild(listItem);
-                    });
-
-                    purchaseResults.style.display = 'block';
-
-                    // Calcula el total de la cuenta
-                    const totalCuenta = responseData.purchasedProducts.reduce((total, product) => {
-                        return total + (product.product.price * product.quantity);
-                    }, 0);
-
-                    // Muestra el total en tu vista 
-                    const totalCuentaElement = document.getElementById('totalCuenta');
-                    totalCuentaElement.textContent = `Total: $${totalCuenta.toFixed(2)}`;
-
-                    // Después de mostrar los resultados, enviar el correo electrónico
-                    const mailUser = purchaseBtn.getAttribute('data-mail-user');
-                    const sendMailResponse = await fetch('/sendMailPurchase/send', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(responseData.purchasedProducts)
-                    });
-
-                    if (sendMailResponse.ok) {
-                        console.log('Correo electrónico enviado con éxito.');
-                    } else {
-                        console.error('Error al enviar el correo electrónico:', sendMailResponse.statusText);
-                    }
-
-                } else {
-                    console.error('Error al finalizar la compra:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error al finalizar la compra:', error);
-            }
+        const sessionResponse = await fetch('/payments/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ items })
         });
+
+        const sessionData = await sessionResponse.json();
+
+        if (sessionResponse.ok) {
+            const stripe = Stripe('pk_test_51PX2ZiGgMZb7GRHpNkmUqfHn0O0XwxNvhmFPVQvAeqY3k3mDWhcA6v7X5vdqK0xhQB03p6AJgnwhn9CcOjxFgOjk00oRDCLCgM');
+            await stripe.redirectToCheckout({ sessionId: sessionData.id });
+        } else {
+            console.error('Error creating checkout session:', sessionData.error);
+            alert('Error creating checkout session');
+        }
+    } catch (error) {
+        console.error('Error during purchase process:', error);
+        alert('Error during purchase process');
     }
 });
