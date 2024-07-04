@@ -1,32 +1,55 @@
-<div>
-    <span style="color: white;">ID del Carrito: {{cid}}</span>
-</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <span class="text-white">ID del Carrito: {{cid}}</span>
+        </div>
+    </div>
 
-<div>
-    <ul>
-        <h4 style="color: white;">Productos agregados al carrito</h4>
-        {{#each products}}
-        <li>
-            <div style="display: flex; align-items: center; height: 100px;">
-                <img src="{{thumbnail}}" alt="{{title}}" style="max-width: 100px;">
-                <span style="color: white; font-weight: bold;">Producto: {{title}} - ${{price}} - Cantidad: {{quantity}}</span>
+    <div class="row mt-4">
+        <div class="col">
+            <h4 class="text-white">Productos agregados al carrito</h4>
+            <ul class="list-unstyled">
+                {{#each products}}
+                <li class="media mb-3">
+                    <img src="{{thumbnail}}" class="mr-3" alt="{{title}}" style="max-width: 100px;">
+                    <div class="media-body text-white">
+                        <h5 class="mt-0 mb-1 font-weight-bold">Producto: {{title}}</h5>
+                        <p>Precio: ${{price}} - Cantidad: {{quantity}}</p>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+
+    {{#if products.length}}
+    <div class="row mt-4">
+        <div class="col">
+            <button id="purchaseBtn" class="btn btn-primary" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button>
+            <button id="emptyCartBtn" class="btn btn-danger ml-2" data-cart-id="{{cid}}">Vaciar Carrito</button>
+        </div>
+    </div>
+    {{/if}}
+
+    <div id="purchaseResults" class="ticket mt-4" style="display: none;">
+        <div class="row">
+            <div class="col">
+                <h4 class="text-white">Productos Comprados</h4>
+                <ul id="purchasedProducts" class="list-unstyled"></ul>
             </div>
-        </li>
-        {{/each}}
-    </ul>
-</div>
-
-{{#if products.length}}
-    <button id="purchaseBtn" data-cart-id="{{cid}}" data-mail-user="{{mailUser}}">Finalizar Compra</button>
-    <button id="emptyCartBtn" data-cart-id="{{cid}}">Vaciar Carrito</button>
-{{/if}}
-
-<div id="purchaseResults" class="ticket" style="display: none;">
-    <h4 style="color: white;">Productos Comprados</h4>
-    <ul id="purchasedProducts"></ul>
-    <h4 style="color: white;">Productos No Comprados</h4>
-    <ul id="notPurchasedProducts"></ul>
-    <p id="totalCuenta"></p>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4 class="text-white">Productos No Comprados</h4>
+                <ul id="notPurchasedProducts" class="list-unstyled"></ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p id="totalCuenta" class="text-white"></p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Scripts al final de la página -->

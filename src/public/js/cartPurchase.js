@@ -34,3 +34,4 @@ document.getElementById('purchaseBtn').addEventListener('click', async () => {
         alert('Error during purchase process');
     }
 });
+

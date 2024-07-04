@@ -19,24 +19,7 @@ export const apiUsersGetUsers = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
-export const apiGetUser = async (req, res) => {
-    try {
-        const userId = req.user._id; // Obtiene el ID del usuario del objeto req.user
 
-        // Busca al usuario por su ID utilizando findById
-        const user = await UserModel.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
-
-        // Si el usuario se encuentra, envía una respuesta con el usuario encontrado
-        res.status(200).json(user);
-    } catch (error) {
-        console.error('Error al obtener el usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-};
 export const apiUsersChangeRole = async (req, res) => {
     const uid = req.params.uid;
     const { role } = req.body;
@@ -67,42 +50,41 @@ export const apiUsersChangeRole = async (req, res) => {
 }
 
 export const apiUsersUploadDocuments = async (req, res) => {
-    const user = await UserModel.findById(req.user._id);
-    const { originalname, filename } = req.files;
+    const uid = req.params.uid;
 
-    // Realiza la lógica para actualizar el usuario con el archivo subido
     try {
-        const uploadedDocuments = req.files.map(file => {
-            const nameWithoutExtension = file.originalname.split('.').slice(0, -1).join('.');
-            return {
-                name: nameWithoutExtension,
-                reference: file.filename
-            };
-        });
+        const uploadedDocuments = req.files.map(file => ({
+            name: file.originalname.split('.').slice(0, -1).join('.'),
+            reference: file.filename
+        }));
 
-        const user = await UserModel.findById(req.user._id);
-        if (user) {
-            // Guarda los documentos en el usuario
-            user.documents.push(...uploadedDocuments);
+        const user = await UserModel.findById(uid);
+        
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        // Agrega los documentos cargados al usuario
+        user.documents.push(...uploadedDocuments);
+        await user.save();
+
+        // Verifica si se han cargado los documentos requeridos
+        const requiredDocuments = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+        const documentNames = user.documents.map(doc => doc.name);
+
+        const documentsMatched = requiredDocuments.every(doc => documentNames.includes(doc));
+
+        if (documentsMatched) {
+            user.status = 'active';
             await user.save();
-
-            // Verifica si se han cargado los documentos requeridos
-            const requiredDocuments = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
-            const documentNames = await user.documents.map(doc => doc.name);
-
-            const documentsMatched = requiredDocuments.every(doc => documentNames.includes(doc));
-
-            if (documentsMatched) {
-                user.status = 'active';
-                await user.save();
-            }
         }
 
         res.status(200).json({ message: 'Documentos cargados exitosamente.' });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
 
 export const apiUsersDeleteInactiveUsers = async (req, res) => {
     // Calcula la fecha límite (2 días atrás)

@@ -90,35 +90,42 @@ export const readInfoUserController = (req, res) => {
 }
 
 export const forgetPassword = async (req, res) => {
-  const email = req.body.email
-  const user = await UserModel.findOne({ email })
+  const email = req.body.email;
+  const user = await UserModel.findOne({ email });
+
   if (!user) {
     return res.status(404).json({ status: 'error', error: 'User not found' });
   }
-  const token = generateRandomString(16)
-  await UserPasswordModel.create({ email, token })
+
+  const token = generateRandomString(16);
+  await UserPasswordModel.create({ email, token });
+
   const mailerConfig = {
     service: 'gmail',
     auth: { user: config.mailDelEcommerce, pass: config.mailPasswordDelEcommerce }
-  }
-  let transporter = nodemailer.createTransport(mailerConfig)
+  };
+
+  let transporter = nodemailer.createTransport(mailerConfig);
+
   let message = {
     from: config.mailDelEcommerce,
     to: email,
-    subject: '[Coder e-commerce API Backend] Reset you password',
-    html: `<h1>[Coder e-commerce API Backend] Reset you password</h1>
-    <hr>Debes resetear tu password haciendo click en el siguiente link <a href="http://localhost:8080/api/sessions/verify-token/${token}" target="_blank">http://localhost:8080/api/sessions/verify-token/${token}</a>
+    subject: '[Coder e-commerce API Backend] Reset your password',
+    html: `<h1>[Coder e-commerce API Backend] Reset your password</h1>
+    <hr>Debes resetear tu contraseña haciendo click en el siguiente link <a href="http://localhost:8080/api/sessions/verify-token/${token}" target="_blank">http://localhost:8080/api/sessions/verify-token/${token}</a>
     <hr>
     Saludos cordiales,<br>
     <b>The Coder e-commerce API Backend</b>`
-  }
+  };
+
   try {
-    await transporter.sendMail(message)
-    res.json({ status: 'success', message: `Email enviado con exito a ${email} para restablecer la contraseña` })
+    await transporter.sendMail(message);
+    // Renderizar la vista de Handlebars después de enviar el correo
+    res.render('forgetPassword', { email }); // Pasamos el email como dato a la vista
   } catch (err) {
-    res.status(500).json({ status: 'errorx', error: err.message })
+    res.status(500).json({ status: 'error', error: err.message });
   }
-}
+};
 
 export const verifyToken = async (req, res) => {
   const token = req.params.token
@@ -133,19 +140,28 @@ export const verifyToken = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.params.user })
+    const user = await UserModel.findOne({ email: req.params.user });
+
+    if (!user) {
+      return res.status(404).json({ status: 'error', message: 'Usuario no encontrado' });
+    }
 
     const newPassword = req.body.newPassword;
 
-    const passwordsMatch = await bcrypt.compareSync(newPassword, user.password);
+    const passwordsMatch = await bcrypt.compare(newPassword, user.password);
     if (passwordsMatch) {
       return res.json({ status: 'error', message: 'No puedes usar la misma contraseña' });
     }
 
-    await UserModel.findByIdAndUpdate(user._id, { password: createHash(newPassword) })
-    res.json({ status: 'success', message: 'Se ha creado una nueva contraseña' })
-    await UserPasswordModel.deleteOne({ email: req.params.user })
+    await UserModel.findByIdAndUpdate(user._id, { password: createHash(newPassword) });
+
+    // Eliminar el registro de token de recuperación de contraseña
+    await UserPasswordModel.deleteOne({ email: req.params.user });
+
+    // Redirigir a una vista que indique éxito en cambiar la contraseña
+    res.render('passwordChangedSuccessfully'); // Puedes crear esta vista en Handlebars
+
   } catch (err) {
-    res.json({ status: 'error', message: 'No se ha podido crear la nueva contraseña' })
+    res.json({ status: 'error', message: 'No se ha podido crear la nueva contraseña' });
   }
-}
+};

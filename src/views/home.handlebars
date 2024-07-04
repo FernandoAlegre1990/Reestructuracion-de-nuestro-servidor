@@ -20,15 +20,24 @@
 <body>
     <div class="container mt-5">
         <h1>Productos</h1>
-        <div class="d-flex justify-content-center mb-4">
-            <button class="btn btn-primary mr-2" onclick="filterByCategory('consolas')">Consolas</button>
-            <button class="btn btn-primary mr-2" onclick="filterByCategory('videojuegos')">Videojuegos</button>
-            <button class="btn btn-primary mr-2" onclick="filterByCategory('figuras de Acción')">Figuras de Acción</button>
-            <button class="btn btn-primary" onclick="filterByCategory('accesorios')">Accesorios</button>
+        
+        <!-- Filtros por categoría -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="categoryFilter">Filtrar por categoría:</label>
+                <select id="categoryFilter" class="form-control">
+                    <option value="">Todas las categorías</option>
+                    <option value="Consolas">Consolas</option>
+                    <option value="Videojuegos">Videojuegos</option>
+                    <option value="Accesorios">Accesorios</option>
+                    <option value="Figuras de Acción">Figuras de Acción</option>
+                </select>
+            </div>
         </div>
+        
         <div class="row" id="product-container">
             {{#each products}}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 product-card {{category}}">
                 <div class="card">
                     <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}">
                     <div class="card-body">
@@ -65,7 +74,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/js/filterProducts.js"></script>
     <script src="/js/addProductCart.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#categoryFilter').change(function() {
+                var selectedCategory = $(this).val();
+                $('.product-card').hide(); // Ocultar todas las tarjetas de productos
+                
+                if (selectedCategory === '') {
+                    $('.product-card').show(); // Mostrar todas las tarjetas si se selecciona Todas las categorías
+                } else {
+                    $('.' + selectedCategory).show(); // Mostrar solo las tarjetas de la categoría seleccionada
+                }
+            });
+        });
+    </script>
 </body>
 </html>
